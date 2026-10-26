@@ -1,3 +1,4 @@
+
 import numpy as np
 import pandas as pd
 
@@ -9,8 +10,8 @@ sample and these columns:
 
     Sample_Name, Material_Type, Tensile_Strength, Fracture_Strain, Elastic_Modulus, Yield_Strength
 
-Complete the six functions below using Pandas. Each function is graded separately, so you can
-work on them in any order. Your functions will be tested on tensile files with different
+Complete the six functions below using Pandas. Each function is graded separately, so you
+can work on them in any order. Your functions will be tested on tensile files with different
 materials, a different number of samples, and rows in a different order than the course file,
 so do not write code that only works for 1045CR, 2024 and PMMA.
 
@@ -26,8 +27,9 @@ def load_tensile_data(_path: str):
     """
 
     # YOUR CODE HERE #
+    data_frame = pd.read_csv(_path)
 
-    return None
+    return data_frame
 
 
 def select_material(_df, _material: str):
@@ -39,8 +41,9 @@ def select_material(_df, _material: str):
     """
 
     # YOUR CODE HERE #
+    _df = _df[_df["Material_Type"] == _material]
 
-    return None
+    return _df
 
 
 def select_strong(_df, _material: str, _min_yield: float):
@@ -54,8 +57,12 @@ def select_strong(_df, _material: str, _min_yield: float):
     """
 
     # YOUR CODE HERE #
+    _df = _df[
+        (_df["Material_Type"] == _material)
+        & (_df["Yield_Strength"] > _min_yield)
+    ]
 
-    return None
+    return _df
 
 
 def get_values(_df, _material: str, _column: str):
@@ -68,8 +75,9 @@ def get_values(_df, _material: str, _column: str):
     """
 
     # YOUR CODE HERE #
+    values = _df.loc[_df["Material_Type"] == _material, _column].to_numpy()
 
-    return None
+    return values
 
 
 def material_statistics(_df, _material: str, _column: str):
@@ -83,8 +91,11 @@ def material_statistics(_df, _material: str, _column: str):
     """
 
     # YOUR CODE HERE #
+    values = _df.loc[_df["Material_Type"] == _material, _column]
 
-    return None
+    std_mean = (values.mean(), values.std())
+
+    return std_mean
 
 
 def summary_table(_df, _columns: list):
@@ -100,7 +111,24 @@ def summary_table(_df, _columns: list):
 
     # YOUR CODE HERE #
 
-    return None
+    names = _df["Material_Type"].unique()
+    names = names.tolist()
+    new_df = {}
+
+    for material in names:
+
+        temp_new_df = _df[_df["Material_Type"] == material]
+        new_df[material] = {}
+
+        for column in _columns:
+
+            std = temp_new_df[column].std()
+            mean = temp_new_df[column].mean()
+            tup = (mean, std)
+
+            new_df[material][column] = tup
+
+    return new_df
 
 
 if __name__ == '__main__':
@@ -110,7 +138,7 @@ if __name__ == '__main__':
     #   1045CR     199.19 +/- 10.69       606.03 +/- 17.53
     #   2024       74.61 +/- 15.63        342.71 +/- 24.2
     #   PMMA       3.09 +/- 0.2           49.41 +/- 3.04
-    path_to_file = '../../../data/tensile/tensile_data.csv'
+    path_to_file = 'data/tensile/tensile_data.csv'
 
     data = load_tensile_data(path_to_file)
     if data is None:
