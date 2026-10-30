@@ -9,13 +9,33 @@ def my_pi(target_error):
     :return: Approximation of PI to specified error bound
     """
 
-    ### YOUR CODE HERE ###
+#Values
+    a = 1
+    b = 1 / math.sqrt(2)
+    t = 1/ 4
+    p = 1
+
+    error = 1
+
+#old values
+    while error >= abs(target_error):
+        a_old = a
+        b_old = b
+        t_old = t
+        p_old = p
+
+#Gauss-legendre 
+        a = (a_old + b_old) / 2
+        b = math.sqrt(a_old * b_old)
+        t = t_old - p_old * (a_old - a)**2
+        p = 2 * p_old
+
+        pi_estimate = ((a + b)**2) / (4 * t)
+
+        error = abs(math.pi - pi_estimate)
 
     # change this so an actual value is returned
-    return 0
-
-
-
+    return pi_estimate
 
 desired_error = 1E-10
 

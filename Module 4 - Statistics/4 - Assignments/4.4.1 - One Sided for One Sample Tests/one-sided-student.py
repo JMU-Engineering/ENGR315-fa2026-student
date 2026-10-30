@@ -34,21 +34,25 @@ def write_to_csv(filename: str, data):
 
 
 def one_sided_tests(_files: list, _mean: float, _alpha: float, _less_than: bool):
-    """
-    Conduct a one-sided t-test on each file, either left-sided or right-sided. Null hypothesis is the means are equal.
-    :param _files: List of file names to be tested. Assume they can be loaded directly as a numpy array
-    :param _mean: The test statistic mean for the hypothesis
-    :param _alpha: Desired alpha value for t-test
-    :param _less_than: If true, then a left-sided (<) t-test is performed. Otherwise, a right-sided test (>)
-    :return: A list of files where the null hypothesis is rejected
-    """
 
-    # list of files where the null hypothesis is rejected
     reject_null_hypothesis = []
 
-    # YOUR CODE HERE #
+    # Loop through each file
+    for file in _files:
 
-    # return files that were rejected
+        # Load data from the file
+        data = np.loadtxt(file)
+
+        # Determine which side to test
+        if _less_than == True:
+            t_stat, p_value = ttest_1samp(data, _mean, alternative='less')
+        else:
+            t_stat, p_value = ttest_1samp(data, _mean, alternative='greater')
+
+        # Reject null hypothesis if p-value is below alpha
+        if p_value < _alpha:
+            reject_null_hypothesis.append(file)
+
     return reject_null_hypothesis
 
 
