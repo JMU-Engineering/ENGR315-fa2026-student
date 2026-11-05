@@ -29,10 +29,20 @@ nums = generate_random_int_list(max_length, upper_bound)
 evens_list = []
 odds_list = []
 
+<<<<<<< Updated upstream
+=======
+"""
+Step 1: Write a FOR loop to iterate through the list nums
+"""
+>>>>>>> Stashed changes
 for number in nums:
     if number % 2 == 0:
         evens_list.append(number)
     else:
         odds_list.append(number)
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 print("The evens list contains: ", evens_list)
 print("The odds list contains: ", odds_list)

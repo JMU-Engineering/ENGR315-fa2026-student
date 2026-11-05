@@ -28,4 +28,11 @@ nums = generate_random_int_list(max_length, upper_bound)
 num_evens = 0
 num_odds = 0
 
-### YOUR CODE BEGINS HERE ###
+for number in nums:
+    if number % 2 == 0:
+        num_evens = num_evens + 1
+    else:
+        num_odds = num_odds + 1
+
+print("The number of even numbers is: ", num_evens)
+print("The number of odd numbers is: ", num_odds)

@@ -31,9 +31,18 @@ std_B = np.std(random_list_B)
 longest_list_is = None
 
 ### YOUR CODE HERE
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 if std_A > std_B:
     longest_list_is = random_list_A
 else:
     longest_list_is = random_list_B
 
+<<<<<<< Updated upstream
+=======
+    print("The list with the largest standard deviation is: ", longest_list_is)
+    print("Standard deviation of list A: ", std_A)
+    print("Standard deviation of list B: ", std_B)
+>>>>>>> Stashed changes

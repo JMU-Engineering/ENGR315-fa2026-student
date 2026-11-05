@@ -4,8 +4,9 @@
 # an example while loop is given below
 a = 1
 while a != 5:
-    a = a + 1  # pay attention where the counter (this part of the loop) is located
+      # pay attention where the counter (this part of the loop) is located
     print("not 5 yet, but we're at " + str(a))
+    a = a + 1
 
 # now, move the counter to after the print statement
 # notice how the value of a has changed in the print value,
