@@ -17,61 +17,65 @@ Submit this file to Gradescope.
 def categorical_test(_observed, _expected, _alpha):
     """
     Chi-square goodness of fit test on counts in categories
-    :param _observed: A list of observed counts, one per category
-    :param _expected: A list of expected counts, one per category (same total as _observed)
-    :param _alpha: Level of significance, e.g. 0.05
-    :return: A tuple (chi2 statistic, p-value, reject) where reject is True if the null hypothesis is rejected
     """
-
-    # Hint: use chisquare() as in the lecture example, then compare the p-value with _alpha
     chi_stat = None
     p_value = None
     reject = None
 
     # YOUR CODE HERE #
+    chi_stat, p_value = chisquare(_observed, f_exp=_expected)
+    reject = p_value < _alpha
 
     return chi_stat, p_value, reject
 
 
 def expected_normal_counts(_bins, _mu, _std, _num_samples):
     """
-    Expected number of samples in each bin if the samples come from a normal distribution
-    :param _bins: A numpy array of bin edges (may start with -np.inf and end with np.inf)
-    :param _mu: Mean of the normal distribution
-    :param _std: Standard deviation of the normal distribution
-    :param _num_samples: Total number of samples
-    :return: A numpy array of expected counts, one per bin (one fewer than the number of edges)
+    Expected number of samples in each bin
     """
-
-    # Hint: the CDF difference between bin edges gives the probability of a value being within each bin
     expected_counts = None
 
     # YOUR CODE HERE #
+    probabilities = np.diff(norm.cdf(_bins, loc=_mu, scale=_std))
+    expected_counts = probabilities * _num_samples
 
     return expected_counts
 
 
 def normal_fit_test(_samples, _alpha):
     """
-    Test whether samples could come from a normal distribution, using the fitted mean and standard deviation
-    :param _samples: A numpy array of samples
-    :param _alpha: Level of significance, e.g. 0.05
-    :return: A tuple (chi2 statistic, p-value, reject) where reject is True if the null hypothesis is rejected
+    Test whether samples could come from a normal distribution
     """
-
-    # Follow these steps (they match the lecture example):
-    # Step 1: fit the samples to a normal distribution with norm.fit()
-    # Step 2: bins are 9 edges from (mean - 2 * std) to (mean + 2 * std) with np.linspace(), then add -np.inf and np.inf
-    # Step 3: bin the samples with np.histogram() to get the observed counts
-    # Step 4: get the expected counts with your expected_normal_counts()
-    # Step 5: run chisquare() with ddof=2, because the mean and standard deviation were estimated from the samples
     chi_stat = None
     p_value = None
     reject = None
 
     # YOUR CODE HERE #
 
+    # Step 1: Fit normal distribution
+    fitted_mean, fitted_std = norm.fit(_samples)
+
+    # Step 2: Create bin edges
+    bins = np.r_[-np.inf, np.linspace(fitted_mean - 2 * fitted_std,
+                                     fitted_mean + 2 * fitted_std, 9), np.inf]
+
+    # Step 3: Calculate observed counts
+    observed_counts, _ = np.histogram(_samples, bins=bins)
+
+    # Step 4: Calculate expected counts
+    expected_counts = expected_normal_counts(
+        bins, fitted_mean, fitted_std, len(_samples)
+    )
+
+    # Step 5: Perform chi-square test
+    chi_stat, p_value = chisquare(
+        observed_counts, f_exp=expected_counts, ddof=2
+    )
+
+    reject = p_value < _alpha
+
     return chi_stat, p_value, reject
+
 
 
 if __name__ == "__main__":

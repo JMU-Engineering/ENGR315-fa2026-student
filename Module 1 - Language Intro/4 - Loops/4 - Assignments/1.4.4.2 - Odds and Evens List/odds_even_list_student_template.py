@@ -1,5 +1,8 @@
 # bring in randomness cause we need it in our lives
+from ast import For, If
 import random
+
+from PIL.ImImagePlugin import number
 
 
 # copy in Dr. Forsyth's random list function for use
@@ -12,7 +15,6 @@ def generate_random_int_list(max_length, upper_bound):
 
     # return the generated list
     return random_vars
-
 
 """
 Given a random list of integers, return two lists of only even and odd values from that random list
@@ -27,18 +29,10 @@ nums = generate_random_int_list(max_length, upper_bound)
 evens_list = []
 odds_list = []
 
-"""
-Step 1: Write a FOR loop to iterate through the list nums
-"""
-
-
-"""
-Step 2: Inside the FOR loop, examine the contents of nums. If the
-value is even, place it in the evens_list. If it is odd, place it in the 
-odds_list
-"""
-
+for number in nums:
+    if number % 2 == 0:
+        evens_list.append(number)
+    else:
+        odds_list.append(number)
 print("The evens list contains: ", evens_list)
 print("The odds list contains: ", odds_list)
-
-

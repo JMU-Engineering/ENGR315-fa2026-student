@@ -13,10 +13,20 @@ Note that Elon's capital will be $33B.
 """
 
 ### all your code below ###
-
+P = 44_000_000_000  # principal amount in dollars = 44_000_000_000  # principal amount in dollars
+R1 = 3.96  # interest rate for 10-year bonds in percent
+R2 = 4.32  # interest rate for 20-year bonds in percent
+T1 = 10  # time in years for 10-year bonds
+T2 = 20  # time in years for 20-year bonds
+N = 1  # number of times interest is compounded per year
+x = P * (1 + (R1 / 100)) ** (N * T1)
+y = P * (1 + (R2 / 100)) ** (N * T2)
 
 # final answer for 10-year
-ten_year_final = None
+ten_year_final = x
 
 # final answer for 20-year
-twenty_year_final = None
+twenty_year_final = y
+
+print("Final value of 10-year bonds: ", ten_year_final)
+print("Final value of 20-year bonds: ", twenty_year_final) 

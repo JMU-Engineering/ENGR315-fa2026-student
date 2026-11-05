@@ -11,9 +11,15 @@ Out-of-state total cost: 47882 USD
 Note: this problem does not require the "compounding interest" formula from the previous problem.
 
 """
+#Your Code Here#
+rate = 5
+in_state_gift_final = 30792 / (rate / 100)
+out_state_gift_final = 47882 / (rate / 100)
 
-### Your code here ###
 
-in_state_gift = 0
+in_state_gift = in_state_gift_final
 
-out_state_gift = 0
+out_state_gift = out_state_gift_final
+
+print("In-state gift needed: ", in_state_gift)
+print("Out-of-state gift needed: ", out_state_gift)

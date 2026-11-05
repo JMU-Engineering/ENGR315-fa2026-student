@@ -22,50 +22,41 @@ Submit this file to Gradescope.
 """
 
 
+
 def fit_normal(_samples):
     """
     Fit samples to a normal distribution
-    :param _samples: A numpy array of samples
-    :return: A tuple (mean, standard deviation) of the fitted normal distribution
     """
-
-    # Hint: norm.fit() returns the mean and standard deviation, as in the lecture example
     fitted_mean = None
     fitted_std = None
 
     # YOUR CODE HERE #
+    fitted_mean, fitted_std = norm.fit(_samples)
 
     return fitted_mean, fitted_std
-
 
 def fit_exponential(_samples):
     """
     Fit samples to an exponential distribution that starts at 0
-    :param _samples: A numpy array of samples
-    :return: The fitted beta (scale) of the exponential distribution. Remember beta = 1 / lambda
     """
-
-    # Hint: use expon.fit() as in the lecture example. Pass floc=0 so the location stays at 0 and only beta is fit
     fit_beta = None
 
     # YOUR CODE HERE #
+    fitted_loc, fit_beta = expon.fit(_samples, floc=0)
 
     return fit_beta
 
 
 def normal_range(_samples, _fraction):
     """
-    Fit samples to a normal distribution, then find the range where a fraction of the values should fall
-    :param _samples: A numpy array of samples
-    :param _fraction: Fraction of values inside the range, e.g. 0.95 for the middle 95%
-    :return: A tuple (lower, upper) for the middle _fraction of the fitted normal distribution
+    Find the range containing the middle fraction of values
     """
-
-    # Hint: fit the samples with your fit_normal() first, then use norm.interval() as in the lecture example
     lower = None
     upper = None
 
     # YOUR CODE HERE #
+    fitted_mean, fitted_std = fit_normal(_samples)
+    lower, upper = norm.interval(_fraction, loc=fitted_mean, scale=fitted_std)
 
     return lower, upper
 

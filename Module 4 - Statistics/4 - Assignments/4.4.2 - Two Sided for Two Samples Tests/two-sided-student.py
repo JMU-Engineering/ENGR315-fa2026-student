@@ -37,20 +37,23 @@ def write_to_csv(filename: str, data):
 
 
 def two_sided_tests(_files1: list, _files2: list, _alpha: float):
-    """
-    Conduct a two-sided t-test on each pair of files. Null hypothesis is the means are equal.
-    :param _files1: List of file names, the first sample of each pair. Assume they can be loaded directly as a numpy array
-    :param _files2: List of file names, the second sample of each pair. Assume they can be loaded directly as a numpy array
-    :param _alpha: Desired alpha value for t-test
-    :return: A list of file pairs (tuples) where the null hypothesis is rejected
-    """
 
-    # list of file pairs where the null hypothesis is rejected
     reject_null_hypothesis = []
 
-    # YOUR CODE HERE #
+    # Loop through each pair of files
+    for i in range(len(_files1)):
 
-    # return file pairs that were rejected
+        # Load data from both files
+        data1 = np.loadtxt(_files1[i])
+        data2 = np.loadtxt(_files2[i])
+
+        # Perform a two-sided Welch's t-test
+        t_stat, p_value = ttest_ind(data1, data2, equal_var=False)
+
+        # Check whether to reject the null hypothesis
+        if p_value < _alpha:
+            reject_null_hypothesis.append((_files1[i], _files2[i]))
+
     return reject_null_hypothesis
 
 
