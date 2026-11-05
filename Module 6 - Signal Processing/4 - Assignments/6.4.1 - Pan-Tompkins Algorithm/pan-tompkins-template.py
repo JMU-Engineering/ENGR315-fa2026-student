@@ -1,50 +1,54 @@
 import numpy as np
 from ekg_testbench import EKGTestBench
+from scipy.signal import find_peaks, butter, sosfiltfilt
+
 
 def detect_heartbeats(filepath):
-    """
-    Perform analysis to detect location of heartbeats
-    :param filepath: A valid path to a CSV file of heart beats
-    :return: signal: a signal that will be plotted
-    beats: the indices of detected heartbeats
-    """
     if filepath == '':
         return list()
 
-    # import the CSV file using numpy
-    path = filepath
+    # load the CSV file
+    data = np.loadtxt(filepath, delimiter=',', skiprows=2)
 
-    # load data in matrix from CSV file; skip first two rows
-    ## your code here
+    # get each column
+    time=data[:, 0]
+    lead1 = data[:, 1]
+    lead2=data[:, 2]
 
-    # save each vector as own variable
-    ## your code here
+    # choose signal
+    signal = lead1
 
-    # identify one column to process. Call that column signal
+    # filter the EKG signal
+    fs = 360
+    sos = butter(3, [5, 18], btype='bandpass', fs=fs, output='sos')
+    filtered=sosfiltfilt(sos, signal)
 
-    signal = -1 ## your code here
+    # differentiate
+    diff_signal = np.diff(filtered, prepend=filtered[0])
 
-    # pass data through LOW PASS FILTER (OPTIONAL)
-    ## your code here
+    # square the result
+    squared=diff_signal**2
 
-    # pass data through HIGH PASS FILTER (OPTIONAL) to create BAND PASS result
-    ## your code here
+    # moving average
+    window = 40
+    moving_avg = np.convolve(squared, np.ones(window)/window, mode='same')
 
-    # pass data through differentiator
-    ## your code here
+    # calculate threshold
+    threshold = np.percentile(moving_avg, 75)*0.5
 
-    # pass data through square function
-    ## your code here
+    # find peaks
+    peaks, _ = find_peaks(moving_avg, height=threshold, distance=90, prominence=threshold*0.5)
 
-    # pass through moving average window
-    ## your code here
+    # locate heartbeat peaks in filtered signal
+    beats=[]
+    for peak in peaks:
+        start = max(0,peak-35)
+        end=min(len(filtered),peak+36)
 
-    # use find_peaks to identify peaks within averaged/filtered data
-    # save the peaks result and return as part of testbench result
+        local_peak = np.argmax(np.abs(filtered[start:end]))+start
+        beats.append(local_peak)
 
-    ## your code here peaks,_ = find_peaks(....)
-
-    beats = None
+    beats=np.array(sorted(set(beats)), dtype=int)
 
     # do not modify this line
     return signal, beats
@@ -71,7 +75,7 @@ if __name__ == "__main__":
     ### DO NOT MODIFY BELOW THIS LINE!!! ###
 
     # path to ekg folder
-    path_to_folder = "../../../data/ekg/"
+    path_to_folder = "data/ekg/"
 
     # select a signal file to run
     signal_filepath = path_to_folder + database_name + ".csv"
